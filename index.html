@@ -46,6 +46,7 @@
   color-scheme:dark}
 
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{background:var(--paper);color:var(--ink)}
 body{font-family:var(--font-body);font-size:18px;line-height:1.65;margin:0;-webkit-text-size-adjust:100%}
 .wrap{max-width:680px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -82,6 +83,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
 .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .row.end{justify-content:flex-end}
+.emailbox{display:flex;flex-direction:column;gap:14px}
 .sendrow{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
 .sendrow .hint{text-align:right;max-width:30em}
 .backlink{appearance:none;background:none;border:0;padding:10px 4px;font-size:15px;color:var(--ink-soft);cursor:pointer;min-height:44px}
@@ -848,7 +850,7 @@ function qInvite(){
     </ul>
     <p class="hint">不會寄廣告，也不會一直打擾你。</p>
     <div class="seg" role="group" aria-label="是否收邀請函"><button id="iv-y" aria-pressed="${yes}">好，寄給我</button><button id="iv-n" aria-pressed="${S.p.invite===false}">先不用，謝謝</button></div>
-    <div id="emailBox" ${yes?'':'hidden'} style="display:flex;flex-direction:column;gap:14px">
+    <div id="emailBox" class="emailbox" ${yes?'':'hidden'}>
       <div class="field"><label for="email">E-mail</label><input type="email" id="email" autocomplete="email" inputmode="email" placeholder="name@example.com" value="${esc(S.p.email)}"><span class="err" id="eerr" hidden>這個 E-mail 格式好像不太對，請再檢查一下。</span></div>
       <label class="consent"><input type="checkbox" id="consent" ${S.p.consent?'checked':''}><span>我同意中壢高商校友會蒐集我的 E-mail，只用來寄送校慶邀請函、校友會刊、傑出校友推薦資訊和實體校友回娘家活動通知，不會提供給其他單位。我可以隨時要求刪除。</span></label>
     </div>
