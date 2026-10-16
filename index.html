@@ -75,6 +75,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .eyebrow{font-size:14px;letter-spacing:.12em;color:var(--gold);font-weight:700}
 .lead{color:var(--ink-soft)}
 .btn{appearance:none;border:0;border-radius:999px;padding:14px 26px;font-weight:700;font-size:18px;cursor:pointer;background:var(--green);color:var(--card);min-height:52px;transition:transform .12s}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .btn:active{transform:scale(.98)}
 .btn.ghost{background:transparent;color:var(--green-ink);box-shadow:inset 0 0 0 2px var(--green)}
 .btn.yellow{background:var(--yellow);color:#1c2a1f}
@@ -252,6 +253,8 @@ const CONFIG = {
   // ★ 後端網址：貼上 Google Apps Script「網頁應用程式」的網址（結尾是 /exec）
   //   留空白 = 示範模式（假資料，不會送出）
   API_URL: "https://script.google.com/macros/s/AKfycbyI-VFhTdfSnbTMmcp4UVZpzEsFJQ3AYLzVtplrj0H_lE8LxyxrP_I-YCIh0Z7Cjanp/exec",
+  // 分享用的網站網址（邀請文字最後的連結）；留空白 = 自動使用目前網頁的網址
+  SHARE_URL: "https://clvscpractice1513.github.io/clvsc-alumni/",
 
   // 入場測驗：每次抽幾題、答對幾題可以進場
   QUIZ_DRAW: 3,
@@ -951,8 +954,10 @@ function mapScreen(revisit){
     </div>
     <div class="card" style="gap:12px">
       <h3>也邀老同學回來看看</h3>
-      <p class="lead">把這個網頁傳到同學的 LINE 群組，讓更多壢商人知道，母校一直惦記著大家。</p>
-      <div class="row"><button class="btn ghost" id="again">回到首頁</button></div>
+      <p class="lead">把這個網頁傳到同學的 LINE 群組，讓更多壢商人知道，母校一直惦記著大家。下面的邀請文字可以直接修改，再按「複製邀請文字」貼到 LINE。</p>
+      <div class="field"><label for="shareText">邀請文字</label><textarea id="shareText" rows="9" style="min-height:11em">${esc(shareText())}</textarea></div>
+      <div class="row"><button class="btn" id="copyShare">複製邀請文字</button><a class="btn ghost" id="lineShare" href="#" target="_blank" rel="noopener">用 LINE 分享</a><span class="hint" id="copyMsg" role="status"></span></div>
+      <div class="row"><button class="linkbtn" id="again">回到首頁</button></div>
     </div>
   </section>`);
   $('#sc-now').onclick=()=>{ SCOPE='now'; drawMap(); };
@@ -960,7 +965,21 @@ function mapScreen(revisit){
   $('#tab-tw').onclick=()=>{ MAPTAB='tw'; drawMap(); };
   $('#tab-world').onclick=()=>{ MAPTAB='world'; drawMap(); };
   $('#again').onclick=()=>{ document.getElementById('wrap').classList.remove('wide'); welcome(); };
+  const ta=$('#shareText'), ln=$('#lineShare');
+  const updLine=()=>{ ln.href='https://line.me/R/msg/text/?'+encodeURIComponent(ta.value); };
+  ta.oninput=updLine; updLine();
+  $('#copyShare').onclick=async()=>{
+    const msg=$('#copyMsg');
+    try{ await navigator.clipboard.writeText(ta.value); msg.textContent='已複製，可以貼到 LINE 了'; }
+    catch(e){ ta.focus(); ta.select(); msg.textContent='請按住文字選取後複製'; }
+  };
   drawMap();
+}
+function siteURL(){ if(CONFIG.SHARE_URL) return CONFIG.SHARE_URL; try{ return location.origin+location.pathname; }catch(e){ return ''; } }
+function shareText(){
+  const p=S.p, c=p.region?classNo():null;
+  const who = p.region ? `我是民國${p.year}年畢業的${c?`${divShort()}第${c}屆`:''}校友，剛剛回母校「線上回娘家」，在地圖上幫${regionName(p.region)}點亮了一盞燈！` : '母校中壢高商辦了「線上回娘家」！';
+  return `【壢商校友線上回娘家】\n${who}\n考考自己還記得多少壢商的事、看看母校這些年的變化，也在地圖上點亮你住的地方。\n學長姐、同學們也一起回來看看吧！\n${siteURL()}`;
 }
 function drawTiles(rows){
   const me=S.p;
