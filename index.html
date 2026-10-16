@@ -247,6 +247,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 </div>
 
 <script src="photos.js"></script>
+<script src="song.js"></script>
 <script>
 /* =========================================================
    CONFIG：要改題目、小知識、選項，只需要改這一段
@@ -287,11 +288,7 @@ const CONFIG = {
       options:["志道大樓","至善大樓","明德大樓","弘道大樓"], answer:"志道大樓",
       note:"志道大樓在民國90年完工，現在綜高高一、高二的教室大多安排在這裡。" }
     // ── 校歌接龍 ──
-    // 填好歌詞後，把下面四行最前面的 // 拿掉，這題就會加入題庫。
-    // answer 要和 options 裡正確的那一句一字不差。
-    // ,{ id:"song", q:"校歌接龍：「（上一句）」，下一句是？",
-    //    options:["（正確的下一句）","（錯誤選項1）","（錯誤選項2）","（錯誤選項3）"], answer:"（正確的下一句）",
-    //    note:"還記得旋律嗎？有空回學校，一起再唱一次。" }
+    // 這一題放在另一個檔案 song.js（由校友會自行建立與維護），網站更新時不會被覆蓋。
   ],
 
   // 答對、答錯時的小回饋（隨機出現）
@@ -582,7 +579,10 @@ function buildQuestion(def){
   return { kind:'single', q:def.q, options:shuffle(def.options), answer:[def.answer], note:fill(def.note), photo:def.photo };
 }
 function startQuiz(){
-  const defs = shuffle(CONFIG.QUIZ_BANK).slice(0, CONFIG.QUIZ_DRAW);
+  const bank = CONFIG.QUIZ_BANK.slice();
+  const song = window.LS_SONG;   // 來自 song.js（可有可無）
+  if(song && song.q && Array.isArray(song.options) && song.options.includes(song.answer)) bank.push(Object.assign({id:'song'}, song));
+  const defs = shuffle(bank).slice(0, CONFIG.QUIZ_DRAW);
   S.quiz = { qs: defs.map(buildQuestion), idx:0, results:[] };
   quizQ();
 }
