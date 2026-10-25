@@ -262,7 +262,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .bigstamp b{display:block;font-weight:400;font-size:clamp(24px,6vw,32px);line-height:1.2}
 .bigstamp span{display:block;font-size:clamp(15px,3.6vw,17px);color:#5b2a26;margin-top:4px;line-height:1.5}
 @keyframes slam{0%{transform:translate(-50%,-50%) rotate(-8deg) scale(2.2);opacity:0}100%{transform:translate(-50%,-50%) rotate(-8deg) scale(1);opacity:1}}
-.rvariant{display:flex;gap:8px;justify-content:center}
+.rvariant{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .rvariant button{appearance:none;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 16px;font-size:15px;cursor:pointer}
 .rvariant button[aria-pressed="true"]{border-color:var(--green);background:var(--green);color:var(--card)}
 .memo{min-height:50px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;text-align:center}
@@ -312,7 +312,7 @@ const CONFIG = {
     { id:'blue',  name:'藍白條紋', img:[5,8], variants:['清爽短袖','穿上外套'], memo:'寶藍色一出場，整條走廊都亮了！', title:'寶藍活力世代', bg:'#d6e5f6' },
     { id:'plaid', name:'英倫格紋', img:[4,10], variants:['清爽短袖','穿上背心'], memo:'格紋上身，氣質滿分。', title:'氣質優雅前輩', bg:'#ece2d3' },
     { id:'pink',  name:'粉紅短袖', img:[1], spy:true, bg:'#f7dede' },
-    { id:'yellow',name:'鵝黃短袖', img:[3], memo:'鵝黃色的青春，走在校園裡特別顯眼！', title:'活力滿點現代壢商人', bg:'#f8efc4' }
+    { id:'yellow',name:'鵝黃制服', img:[3,11,12,13], variants:['清爽短袖','穿上背心','打上藍領帶','換上黑領結'], memo:'鵝黃色的青春，走在校園裡特別顯眼！', title:'活力滿點現代壢商人', bg:'#f8efc4' }
   ],
   // ★ 後端網址：貼上 Google Apps Script「網頁應用程式」的網址（結尾是 /exec）
   //   留空白 = 示範模式（假資料，不會送出）
