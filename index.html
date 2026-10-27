@@ -1111,7 +1111,7 @@ function qConfirm(){
     <h2>確認一下，這樣對嗎？</h2>
     <p class="lead">哪裡不對，點「修改」就能直接回去改。送出後就不能再修改囉。</p>
     <ul class="summary">${items.map(([k,v,step])=>`<li><span class="k">${k}</span><span class="v">${esc(v)}</span><button data-step="${step}" id="ed-${step}">修改</button></li>`).join('')}</ul>
-    <div class="sendrow"><p class="hint">送出後，就能在地圖上看到你點亮的那盞燈。之後用同一支手機再打開，首頁按「直接看地圖」就能回來看（每學年度會重新開始）。地圖只顯示縣市和人數，不會出現任何人的名字或 E-mail。</p><button class="btn" id="send">沒問題，送出</button></div>
+    <div class="sendrow"><p class="hint">送出後，就能在地圖上看到你點亮的那盞燈。地圖只顯示縣市和人數，不會出現任何人的名字或 E-mail。</p><button class="btn" id="send">沒問題，送出</button></div>
   </section>`);
   stage.querySelectorAll('.summary button').forEach(b=>b.onclick=()=>{ S.editing=true; if(b.dataset.step==='uniform') return runway(); S.step=FLOW.indexOf(b.dataset.step); flow(); });
   $('#send').onclick=submit;
@@ -1166,7 +1166,6 @@ function mapScreen(revisit){
       <div class="sealrow">${myC?`<div class="seal"><span>${divShort()}</span><b>第${myC}屆</b></div>`:''}
         <h1 style="font-size:clamp(26px,6vw,38px)">${me.region?`${esc(regionName(me.region))}又亮起了一盞燈`:'壢商人的燈火地圖'}</h1></div>
       <p class="lead"><b class="promise">不管你在哪裡，母校都與你同在。</b>${me.region&&!revisit?`你是${SEASON()}學年度第 ${nNow.toLocaleString()} 位回娘家的校友。`:''}點地圖上的縣市或泡泡，看看那裡的學長姐都過得如何。</p>
-      ${me.region&&!revisit?`<p class="hint">📌 小提醒：這支手機已經記住你了。今年之內再打開網頁，首頁按「直接看地圖」就能回來看最新的燈火，不用再答一次（每學年度會重新開始）。</p>`:''}
     </div>
     <div class="tiles" id="tiles"></div>
     <div class="mapgrid">
@@ -1186,7 +1185,7 @@ function mapScreen(revisit){
       <p class="lead">把這個網頁傳到同學的 LINE 群組，讓更多壢商人知道，母校一直惦記著大家。下面的邀請文字可以直接修改，再按「複製邀請文字」貼到 LINE。</p>
       <div class="field"><label for="shareText">邀請文字</label><textarea id="shareText" rows="9" style="min-height:11em">${esc(shareText())}</textarea></div>
       <div class="row"><button class="btn" id="copyShare">複製邀請文字</button><a class="btn ghost" id="lineShare" href="#" target="_blank" rel="noopener">用 LINE 分享</a><span class="hint" id="copyMsg" role="status"></span></div>
-      <div class="row"><button class="linkbtn" id="again">回到首頁</button></div>
+      <div class="row" style="flex-direction:column;align-items:flex-start;gap:2px"><button class="linkbtn" id="again">回到首頁</button><p class="hint">同一支手機或電腦填過一次，下次打開就能直接看地圖。</p></div>
     </div>
   </section>`);
   $('#sc-now').onclick=()=>{ SCOPE='now'; drawMap(); };
