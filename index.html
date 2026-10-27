@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <title>壢商校友線上回娘家</title>
+<meta name="description" content="母校中壢高商想念你！考考自己還記得多少壢商的事，換上當年的制服，在地圖上為你住的地方點亮一盞燈。">
+<meta property="og:title" content="壢商校友線上回娘家">
+<meta property="og:description" content="學長姐，歡迎回娘家！考考記憶、換上當年的制服，在校友地圖上點亮一盞燈。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://clvscpractice1513.github.io/clvsc-alumni/">
+<meta property="og:image" content="https://clvscpractice1513.github.io/clvsc-alumni/share.jpg">
+
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -294,11 +301,9 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
     <div class="progress" id="progress" aria-hidden="true"></div>
   </div>
   <main id="stage" aria-live="polite"></main>
-  <p class="demo" id="demoNote" hidden>這是示範版：地圖上的人數是假資料，你填的內容只存在這台裝置，不會送出。</p>
 </div>
 
-<script src="photos.js"></script>
-<script src="uniforms.js"></script>
+<script>window.LS_PHOTOS={"gate47": "photos/gate47.webp", "gate48": "photos/gate48.webp", "gate76": "photos/gate76.webp", "gate80": "photos/gate80.webp", "gate87": "photos/gate87.webp", "gate115": "photos/gate115.webp", "xinyi65": "photos/xinyi65.webp", "xinyi68": "photos/xinyi68.webp", "xinyi78": "photos/xinyi78.webp", "xinyi115": "photos/xinyi115.webp", "court54": "photos/court54.webp", "court80": "photos/court80.webp", "court115": "photos/court115.webp", "shop81": "photos/shop81.webp", "shop115": "photos/shop115.webp", "lib47out": "photos/lib47out.webp", "lib47": "photos/lib47.webp", "lib89": "photos/lib89.webp", "zhidao90": "photos/zhidao90.webp", "tfte": "photos/tfte.webp", "mm": "photos/mm.webp", "hall81": "photos/hall81.webp", "dorm81": "photos/dorm81.webp", "dorm82": "photos/dorm82.webp", "it86": "photos/it86.webp", "gym87": "photos/gym87.webp", "pool": "photos/pool.webp", "court_bb": "photos/court_bb.webp"};window.LS_UNIFORMS={"1": "uniforms/1.webp", "2": "uniforms/2.webp", "3": "uniforms/3.webp", "4": "uniforms/4.webp", "5": "uniforms/5.webp", "6": "uniforms/6.webp", "7": "uniforms/7.webp", "8": "uniforms/8.webp", "9": "uniforms/9.webp", "10": "uniforms/10.webp", "11": "uniforms/11.webp", "12": "uniforms/12.webp", "13": "uniforms/13.webp"};</script>
 <script src="song.js"></script>
 <script>
 /* =========================================================
@@ -391,9 +396,9 @@ const CONFIG = {
       ["court54","民國54年","民國54年的前後排教室"],
       ["court80","民國80年","民國80年的前後排教室（行政大樓及信義大樓之間）"],
       ["court115","115年","現在的行政大樓及信義大樓之間（115年拍攝）"] ]},
-    shop:   { title:"員生消費實習商店與新羅浮宮", items:[
-      ["shop81","民國81年","民國81年的員生消費實習商店"],
-      ["shop115","115年","新羅浮宮，二樓是 OK 便利商店（115年拍攝）"] ]},
+    shop:   { title:"員生社與新羅浮宮", items:[
+      ["shop81","民國81年","民國81年的員生社"],
+      ["shop115","115年","現在的新羅浮宮，二樓是 OK 便利商店（115年拍攝）"] ]},
     lib:    { title:"圖書館", items:[
       ["lib47out","民國47年","民國47年的圖書室外觀"],
       ["lib47","民國47年・內部","民國47年的圖書室內部"],
@@ -402,7 +407,7 @@ const CONFIG = {
       ["gym87","民國87年","民國87年游藝館落成"],
       ["pool","溫水游泳池","游藝館 25 米溫水游泳池（目前仍在使用）"],
       ["court_bb","籃球場","游藝館籃球場（目前仍在使用）"] ]},
-    hall:   { title:"中正堂", items:[ ["hall81","民國81年","民國81年的中正堂及門口（今已拆除）"] ]},
+    hall:   { title:"中正堂與志道大樓", items:[ ["hall81","民國81年","民國81年的中正堂及門口（今已拆除）"], ["zhidao90","現在","中正堂拆除後，原址蓋起了志道大樓"] ]},
     dorm:   { title:"女生宿舍崇清村", items:[
       ["dorm81","民國81年","民國81年的女生宿舍崇清村（78年興建）"],
       ["dorm82","民國82年","民國82年的崇清村及操場"] ]},
@@ -433,8 +438,8 @@ const CONFIG = {
       ["國際貿易科", 77, null],           // 約74學年度增設
       ["資料處理科", 77, null],           // 約74學年度增設
       ["會計事務科", 78, 98],             // 96學年度停招 → 最晚98年畢業；最早畢業年為推估
-      ["綜合職能科", 93, null],           // 90學年度開設
-      ["綜合高中", 95, null],             // 92學年度開辦
+      ["綜合職能科", 93, null],           // 90學年度開設（招收特教生）→ 93年起才有畢業生
+      ["綜合高中", 97, null],             // 94學年度開辦 → 97年第一屆畢業
       ["多媒體設計科", 118, null],         // 115學年度設立 → 118年起才有畢業生
       ["記不清楚了", null, null] ],
     night: [
@@ -458,8 +463,8 @@ const CONFIG = {
     "商業經營科": { when:"現在", title:"商經科日夜都有", body:"商業經營科在日間部和進修部都有開設，是壢商的主要科別之一。" },
     "綜合商業科": { when:"62學年度", title:"壢商最早的兩個科", body:"62學年度壢商開始分科教學，最早只有「綜合商業」和「會計統計」兩科。你是分科教學的第一批學長姐之一！" },
     "會計統計科": { when:"62學年度", title:"壢商最早的兩個科", body:"62學年度壢商開始分科教學，最早只有「綜合商業」和「會計統計」兩科。你是分科教學的第一批學長姐之一！" },
-    "綜合高中": { when:"92學年度", title:"綜高拿過兩次優等", body:"壢商在92學年度開辦綜合高中，94和96學年度都拿到教育部綜高評鑑「優等」，還承辦過全國綜高宣導業務。" },
-    "綜合職能科": { when:"90學年度", title:"綜職科二十多年了", body:"綜合職能科在90學年度開設，從一班慢慢增加到每年級兩個班。" },
+    "綜合高中": { when:"94學年度", title:"綜高兩度榮獲優等", body:"壢商在94學年度開辦綜合高中，94、96學年度兩度榮獲教育部綜高評鑑「優等」，還承辦過全國綜高宣導業務。" },
+    "綜合職能科": { when:"90學年度", title:"綜職科二十多年了", body:"綜合職能科在90學年度開設，招收特教生，從一班慢慢增加到每年級兩個班。" },
     "多媒體設計科": { when:"115學年度", title:"最新的科別", body:"多媒體設計科是115學年度新成立的科，你們是第一批學生，謝謝你們陪著新科別一起長大！" },
     "高級部（尚未分科）": { when:"43年", title:"從一個高級部班開始", body:"壢商創校那年只有高級部1班、初級部3班，從這裡一路成長到今天的規模。" },
     "_junior": { when:"59學年度", title:"初級部走入歷史", body:"57學年度起配合政策逐年減班，初級部在59學年度全部結束。你是壢商最早的一批學長姐，謝謝你一路看著母校長大。" },
@@ -483,9 +488,9 @@ const CONFIG = {
     { photo:"gate", gallery:true, when:"民國47年～現在", title:"校門的樣子，你記得哪一個？", body:"從民國47年到現在，壢商的校門換過好幾次樣子。點下面的年份看看，哪一個是你當年每天走進的校門？" },
     { photo:"xinyi", gallery:true, when:"民國65年", title:"懷恩樓就是現在的信義大樓", body:"民國65年完工的懷恩樓，就是現在的信義大樓，到現在都還在使用。當年的圖書館也曾設在懷恩樓裡。" },
     { photo:"court", gallery:true, when:"民國54年～現在", title:"前後排教室的那塊地方", body:"行政大樓和信義大樓之間，以前是一排排的前後排教室。點年份看看，現在變成什麼樣子了。" },
-    { photo:"shop", gallery:true, when:"民國81年", title:"還記得員生消費實習商店嗎？", body:"這是民國81年的員生消費實習商店。現在校園裡有「新羅浮宮」，二樓是 OK 便利商店。" },
+    { photo:"shop", gallery:true, when:"今昔", title:"還記得員生社嗎？", body:"員生社的全名是「員生消費合作社」，以前設在和平大樓地下室，有熱食部和飲料部，文具、便當、制服都買得到，還曾有手搖飲「休閒小站」進駐。現在員生社已經走入歷史，新羅浮宮二樓改由 OK 便利商店進駐，中午也可以訂學校的團膳，營養又方便。" },
     { photo:"gym", gallery:true, when:"民國87年", title:"游藝館裡有溫水游泳池", body:"民國87年落成的游藝館，裡面有 25 米溫水游泳池和室內籃球場，到現在都還在使用。" },
-    { photo:"hall", gallery:true, when:"民國81年", title:"中正堂已經拆除了", body:"當年師生集資興建的中正堂，現在已經拆除。這是民國81年的中正堂和門口。" },
+    { photo:"hall", gallery:true, when:"民國81年", title:"中正堂已經拆除了", body:"當年師生集資興建的中正堂，現在已經拆除，原址蓋起了志道大樓。點下面的年份，看看同一個位置的今昔。" },
     { photo:"dorm", gallery:true, when:"民國78年", title:"壢商曾經有女生宿舍", body:"民國78年興建的女生宿舍叫做「崇清村」。這是民國81、82年的崇清村和操場。" }
   ],
 
@@ -554,7 +559,7 @@ function demoRows(){
   const rows=[];
   for(let i=0;i<168;i++){
     const y=Math.round(52+rnd()*62); const dv=y<60&&rnd()<.4?'junior':(rnd()<.18?'night':'day');
-    const deps = dv==='junior'? [''] : (dv==='night'? (y<85?CONFIG.DEPTS.night.slice(0,5):CONFIG.DEPTS.night.slice(5,7)).map(d=>d[0]) : (y<62?["高級部（尚未分科）"]: y<74?["綜合商業科","會計統計科"]: y<97?["商業經營科","國際貿易科","會計事務科","資料處理科"]:["商業經營科","國際貿易科","資料處理科","綜合高中","綜合職能科"]));
+    const deps = dv==='junior'? [''] : (dv==='night'? (y<85?CONFIG.DEPTS.night.slice(0,5):CONFIG.DEPTS.night.slice(5,7)).map(d=>d[0]) : (y<62?["高級部（尚未分科）"]: y<74?["綜合商業科","會計統計科"]: y<93?["商業經營科","國際貿易科","會計事務科","資料處理科"]: y<97?["商業經營科","國際貿易科","會計事務科","資料處理科","綜合職能科"]: y<99?["商業經營科","國際貿易科","會計事務科","資料處理科","綜合高中","綜合職能科"]:["商業經營科","國際貿易科","資料處理科","綜合高中","綜合職能科"]));
     const jb = y<70? wpick([["退休享受人生",6],["家庭照顧",2],["自己創業",2],["其他",1]]) : wpick(CONFIG.JOBS.slice(0,13).map((j,k)=>[j,[9,8,7,5,5,6,3,4,3,2,4,2,1][k]]));
     const rg = rnd()<.92? 'tw:'+wpick(counties) : 'xx:'+wpick(abroad);
     const r=rnd(); rows.push({s: r<.55? SEASON0 : r<.82? SEASON0-1 : SEASON0-2, y,dv,dp:pick(deps),jb,rg});
@@ -767,9 +772,11 @@ function keepStage(){ const r=$('#rstage').getBoundingClientRect(); if(r.top<0||
 function showUni(id, anim=true){
   const u=UNI(id), v=u.spy?0:S.p.uvar, st=$('#rstage'), who=$('#who');
   st.style.backgroundColor=u.bg; $('#rempty').hidden=true;
-  const put=()=>{ who.innerHTML=`<img alt="${esc(u.name)}的男女生制服插畫" src="${uniImg(u,v)}">`; };
-  if(anim){ st.querySelectorAll('.shutter,.finder').forEach(e=>e.remove()); st.insertAdjacentHTML('beforeend','<div class="shutter"></div><div class="finder"></div>');
-    setTimeout(put,100); setTimeout(()=>st.querySelectorAll('.shutter,.finder').forEach(e=>e.remove()),560); } else put();
+  const src=uniImg(u,v), put=()=>{ who.innerHTML=`<img alt="${esc(u.name)}的男女生制服插畫" src="${src}">`; };
+  const ready=(typeof preload==='function'? preload(src) : Promise.resolve());
+  if(anim){ const flash=()=>{ st.querySelectorAll('.shutter,.finder').forEach(e=>e.remove()); st.insertAdjacentHTML('beforeend','<div class="shutter"></div><div class="finder"></div>');
+      setTimeout(put,100); setTimeout(()=>st.querySelectorAll('.shutter,.finder').forEach(e=>e.remove()),560); };
+    let done=false; ready.then(()=>{ if(!done){ done=true; flash(); } }); setTimeout(()=>{ if(!done){ done=true; flash(); } }, 2500); } else put();
   stage.querySelectorAll('.ucard').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===id)));
   const vr=$('#rvariant');
   if(u.variants){ vr.hidden=false; vr.innerHTML=u.variants.map((n,i)=>`<button data-i="${i}" aria-pressed="${i===S.p.uvar}">${n}</button>`).join('');
@@ -1104,7 +1111,7 @@ function qConfirm(){
     <h2>確認一下，這樣對嗎？</h2>
     <p class="lead">哪裡不對，點「修改」就能直接回去改。送出後就不能再修改囉。</p>
     <ul class="summary">${items.map(([k,v,step])=>`<li><span class="k">${k}</span><span class="v">${esc(v)}</span><button data-step="${step}" id="ed-${step}">修改</button></li>`).join('')}</ul>
-    <div class="sendrow"><p class="hint">送出後，就能在地圖上看到你點亮的那盞燈。地圖只顯示縣市和人數，不會出現任何人的名字或 E-mail。</p><button class="btn" id="send">沒問題，送出</button></div>
+    <div class="sendrow"><p class="hint">送出後，就能在地圖上看到你點亮的那盞燈。之後用同一支手機再打開，首頁按「直接看地圖」就能回來看（每學年度會重新開始）。地圖只顯示縣市和人數，不會出現任何人的名字或 E-mail。</p><button class="btn" id="send">沒問題，送出</button></div>
   </section>`);
   stage.querySelectorAll('.summary button').forEach(b=>b.onclick=()=>{ S.editing=true; if(b.dataset.step==='uniform') return runway(); S.step=FLOW.indexOf(b.dataset.step); flow(); });
   $('#send').onclick=submit;
@@ -1159,6 +1166,7 @@ function mapScreen(revisit){
       <div class="sealrow">${myC?`<div class="seal"><span>${divShort()}</span><b>第${myC}屆</b></div>`:''}
         <h1 style="font-size:clamp(26px,6vw,38px)">${me.region?`${esc(regionName(me.region))}又亮起了一盞燈`:'壢商人的燈火地圖'}</h1></div>
       <p class="lead"><b class="promise">不管你在哪裡，母校都與你同在。</b>${me.region&&!revisit?`你是${SEASON()}學年度第 ${nNow.toLocaleString()} 位回娘家的校友。`:''}點地圖上的縣市或泡泡，看看那裡的學長姐都過得如何。</p>
+      ${me.region&&!revisit?`<p class="hint">📌 小提醒：這支手機已經記住你了。今年之內再打開網頁，首頁按「直接看地圖」就能回來看最新的燈火，不用再答一次（每學年度會重新開始）。</p>`:''}
     </div>
     <div class="tiles" id="tiles"></div>
     <div class="mapgrid">
@@ -1291,8 +1299,17 @@ function renderInfo(){
   const a=$('#all'); if(a) a.onclick=()=>{ SEL=null; drawMap(); };
 }
 
-if(!LIVE) $('#demoNote').hidden=false;
 welcome();
+// 首頁顯示後，趁校友在答題時，背景先把制服圖（優先）和照片下載好，之後換裝不用等
+const IMG_CACHE={};
+function preload(src){ if(!src||IMG_CACHE[src]) return IMG_CACHE[src]; const i=new Image(); i.decoding='async'; IMG_CACHE[src]=new Promise(r=>{ i.onload=i.onerror=()=>r(i); }); i.src=src; return IMG_CACHE[src]; }
+function preloadAll(){
+  const first=CONFIG.UNIFORMS.map(u=>uniImg(u,0)), rest=CONFIG.UNIFORMS.flatMap(u=>u.img.slice(1).map((_,k)=>uniImg(u,k+1)));
+  const queue=[...first,...rest,...Object.values(window.LS_PHOTOS||{})];
+  let i=0; const next=()=>{ if(i>=queue.length) return; Promise.resolve(preload(queue[i++])).then(next); };
+  next(); next();      // 同時兩張，不會塞爆手機網路
+}
+window.addEventListener('load',()=> setTimeout(()=> window.requestIdleCallback ? requestIdleCallback(preloadAll,{timeout:2000}) : preloadAll(), 300));
 </script>
 
 </body>
