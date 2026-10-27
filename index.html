@@ -884,7 +884,9 @@ function keepLink(){   // 紀念圖資料放在 # 後面，不會傳到任何伺
 }
 async function saveKeepsake(){
   const msg=$('#keepMsg'), name=`CLVSC-${S.keepSeason||SEASON()}-keepsake.jpg`;   // 英文檔名，各種電腦都不會變成亂碼
-  if(IS_LINE){ msg.textContent='LINE 裡面不能存圖，正在用手機的瀏覽器打開紀念圖，打開後再按一次「儲存圖片」。'; location.href=keepLink(); return; }
+  if(IS_LINE){   // LINE 內建瀏覽器：先請校友長按存圖，存不了再改用手機瀏覽器開
+    msg.innerHTML=`請長按上面的紀念圖儲存。若無法直接存圖，請<a href="${esc(keepLink())}">用手機瀏覽器開啟紀念圖</a>，開啟後再按一次「儲存圖片」。`;
+    $('#keepImg').scrollIntoView({block:'center',behavior:'smooth'}); return; }
   if(!KEEP_BLOB) return;
   if(IS_MOBILE){
     try{ const file=new File([KEEP_BLOB],name,{type:'image/jpeg'});
@@ -898,7 +900,7 @@ function bindKeepsake(){
   $('#nick').oninput=e=>{ S.p.nick=e.target.value.trim(); showKeepsake(); };
   const rd=$('#keepRedo'); if(rd) rd.onclick=()=>{ document.getElementById('wrap').classList.remove('wide'); S.editing=false; S.afterMap=true; runwayAfterMap(); };
   $('#keepSave').onclick=saveKeepsake;
-  $('#keepMsg').textContent = IS_LINE ? '在 LINE 裡打開時，按「儲存圖片」會改用手機瀏覽器打開，就能存到相簿。' : (IS_MOBILE ? '也可以長按圖片儲存，再分享到 LINE 或 FB。' : '也可以在圖片上按右鍵另存。');
+  $('#keepMsg').textContent = IS_MOBILE ? '也可以長按圖片儲存，再分享到 LINE 或 FB。' : '也可以在圖片上按右鍵另存。';
   showKeepsake();
 }
 // 從 LINE 轉到手機瀏覽器時，只顯示紀念圖
