@@ -7,7 +7,6 @@
 <meta property="og:title" content="壢商校友線上回娘家">
 <meta property="og:description" content="學長姐，歡迎回娘家！考考記憶、換上當年的制服，在校友地圖上點亮一盞燈。">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://clvscpractice1513.github.io/clvsc-alumni/">
 <meta property="og:image" content="https://clvscpractice1513.github.io/clvsc-alumni/share.jpg?v=3">
 
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -1236,11 +1235,13 @@ function mapScreen(revisit){
   if($('#keepCard')) bindKeepsake();
   drawMap();
 }
+// 分享用網址加上學年度（例如 ?s=115）：LINE 會把每個網址的預覽記住很久，換成新網址就會重新抓最新的預覽圖，每年也自動換新
+function shareURL(){ const u=siteURL(); return u ? u+(u.includes('?')?'&':'?')+'s='+SEASON() : u; }
 function siteURL(){ if(CONFIG.SHARE_URL) return CONFIG.SHARE_URL; try{ return location.origin+location.pathname; }catch(e){ return ''; } }
 function shareText(){
   const p=S.p;
   const who = p.region ? `我剛剛回母校「線上回娘家」，在地圖上幫「${regionName(p.region)}」點亮了一盞燈！` : '母校中壢高商辦了「線上回娘家」！';
-  return `【壢商校友線上回娘家】\n${who}\n考考自己還記得多少壢商的事、看看母校這些年的變化，也在地圖上點亮你住的地方。\n學長姐、同學們也一起回來看看吧！\n${siteURL()}`;
+  return `【壢商校友線上回娘家】\n${who}\n考考自己還記得多少壢商的事、看看母校這些年的變化，也在地圖上點亮你住的地方。\n學長姐、同學們也一起回來看看吧！\n${shareURL()}`;
 }
 function drawTiles(rows){
   const me=S.p;
