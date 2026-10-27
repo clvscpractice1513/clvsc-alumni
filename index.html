@@ -864,7 +864,7 @@ function keepsakeHTML(){
         <div class="field"><label for="nick">想留個暱稱嗎？（可以不填）</label><input id="nick" maxlength="10" placeholder="例如：阿明、小美" value="${esc(S.p.nick||'')}"></div>
         <p class="hint">暱稱只會畫在你的圖上，不會送出，也不會存進任何資料。</p>
         <div class="row"><button class="btn" id="keepSave">儲存圖片</button><button class="btn ghost" id="keepRedo">換一套制服</button></div>
-        <p class="hint" id="keepMsg" role="status">手機上也可以長按圖片儲存，再分享到 LINE 或 FB。</p>
+        <p class="hint" id="keepMsg" role="status">也可以長按圖片儲存。</p>
       </div></div></div>`;
 }
 // 存圖：電腦直接下載；手機用系統分享（可存到相簿）；LINE 內建瀏覽器不能存圖，改用手機瀏覽器打開紀念圖
@@ -890,7 +890,7 @@ async function saveKeepsake(){
   if(!KEEP_BLOB) return;
   if(IS_MOBILE){
     try{ const file=new File([KEEP_BLOB],name,{type:'image/jpeg'});
-      if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file]}); msg.textContent='在跳出的選單選「儲存影像」或「儲存到相簿」，也可以直接分享到 LINE。'; return; }
+      if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file]}); msg.textContent='在跳出的選單選「儲存影像」或「儲存到相簿」就可以了。'; return; }
     }catch(e){ if(e&&e.name==='AbortError') return; }
   }
   const a=document.createElement('a'); a.href=KEEP_URL; a.download=name; document.body.appendChild(a); a.click(); a.remove();
@@ -900,7 +900,7 @@ function bindKeepsake(){
   $('#nick').oninput=e=>{ S.p.nick=e.target.value.trim(); showKeepsake(); };
   const rd=$('#keepRedo'); if(rd) rd.onclick=()=>{ document.getElementById('wrap').classList.remove('wide'); S.editing=false; S.afterMap=true; runwayAfterMap(); };
   $('#keepSave').onclick=saveKeepsake;
-  $('#keepMsg').textContent = IS_MOBILE ? '也可以長按圖片儲存，再分享到 LINE 或 FB。' : '也可以在圖片上按右鍵另存。';
+  $('#keepMsg').textContent = IS_MOBILE ? '也可以長按圖片儲存。' : '也可以在圖片上按右鍵另存。';
   showKeepsake();
 }
 // 從 LINE 轉到手機瀏覽器時，只顯示紀念圖
