@@ -551,7 +551,7 @@ async function api(method, body){
 function gs(fn,arg){ return new Promise((res,rej)=>{ const r=google.script.run.withSuccessHandler(res).withFailureHandler(rej); arg===undefined? r[fn]() : r[fn](arg); }); }
 // 開放期間（示範版用；正式版以 Apps Script 的判斷為準）
 function seasonNow(){ const d=new Date(), roc=d.getFullYear()-1911, m=d.getMonth()+1, day=d.getDate();
-  if(m>10||(m===10&&day>=31)) return roc; if(m<=2) return roc-1; return roc; }
+  if(m>10||(m===10&&day>=30)) return roc; if(m<=2) return roc-1; return roc; }
 function demoRows(){
   let s=20240915; const rnd=()=>{s=(s*1103515245+12345)%2147483648;return s/2147483648};
   const wpick=(arr)=>{let t=rnd()*arr.reduce((a,b)=>a+b[1],0);for(const [v,w] of arr){if((t-=w)<=0)return v}return arr[0][0]};
@@ -572,7 +572,7 @@ const API = {
     if(GAS){ return await gs('getStats'); }
     if(CONFIG.API_URL){ return await api('GET'); }
     const mine = store.get('lsAlumniDemoMine') || [];
-    return { open:true, season:SEASON0, next:SEASON0+1, openDate:'10/31', rows: demoRows().concat(mine) };
+    return { open:true, season:SEASON0, next:SEASON0+1, openDate:'10/30', rows: demoRows().concat(mine) };
   },
   async submit(rec){
     if(GAS){ return await gs('submitResponse', rec); }
@@ -584,7 +584,7 @@ const API = {
 };
 const SEASON0 = seasonNow();
 let STATS = null;
-const statsReady = API.stats().then(s=>STATS=s).catch(()=>STATS={open:true,season:SEASON0,next:SEASON0+1,openDate:'10/31',rows:[]});
+const statsReady = API.stats().then(s=>STATS=s).catch(()=>STATS={open:true,season:SEASON0,next:SEASON0+1,openDate:'10/30',rows:[]});
 const SEASON = ()=> (STATS&&STATS.season)||SEASON0;
 const doneKey = ()=> 'lsAlumniDone:'+SEASON();
 const seasonRows = ()=> ((STATS&&STATS.rows)||[]).filter(r=>r.s===SEASON());
