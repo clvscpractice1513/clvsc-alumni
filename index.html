@@ -204,7 +204,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .mapsvg .land{fill:var(--map-0);stroke:var(--card);stroke-width:.4}
 .mapsvg .land.has{fill:var(--map-2);cursor:pointer}
 .mapsvg .land.has:hover,.mapsvg .land.sel{fill:var(--map-3)}
-.mapsvg .bub{fill:var(--yellow);stroke:var(--green-ink);stroke-width:1.2;cursor:pointer;fill-opacity:.9}
+.mapsvg .bub{fill:var(--yellow);stroke:var(--green-ink);stroke-width:1;cursor:pointer;fill-opacity:.85}
 .mapsvg .bub.sel{stroke-width:3}
 .mapsvg .land.home{fill:var(--seal);cursor:pointer}
 .mapsvg .land.home.sel{stroke:var(--ink);stroke-width:1}
@@ -1253,7 +1253,7 @@ function shareText(){
 function drawTiles(rows){
   const me=S.p;
   const regions=new Set(rows.map(r=>r.rg));
-  const twN=[...regions].filter(r=>r&&r.startsWith('tw:')).length, xxN=[...regions].filter(r=>r&&r.startsWith('xx:')).length;
+  const twN=[...regions].filter(r=>r&&r.startsWith('tw:')).length, xxN=[...regions].filter(r=>r&&r.startsWith('xx:')&&r!=='xx:OTH').length;   // 「其他國家」不算一國，人數另外標在地圖圖例
   const second = me.region
     ? `<b>${rows.filter(r=>r.y===me.year).length}</b><span>位民國${me.year}年畢業</span>`
     : (SCOPE==='now' ? `<b>${((STATS&&STATS.rows)||[]).length.toLocaleString()}</b><span>位歷年累計</span>` : `<b>${new Set(rows.map(r=>r.s)).size}</b><span>個學年度</span>`);
@@ -1311,7 +1311,7 @@ function drawMap(){
     const [x,y,w,h]=GEO.world.vb;
     svg=`<svg class="mapsvg" viewBox="${x} ${y} ${w} ${h}" role="img" aria-label="全世界校友分布地圖">
       ${GEO.world.f.map(f=>{const rg=f.i==='TWN'?'tw:*':'xx:'+f.i; const tw=f.i==='TWN'; const h=has.has(f.i)&&(tw||by.has(rg)); const sel=SEL===rg||(tw&&SEL&&SEL.startsWith('tw:'));return `<path class="land ${tw?'home':(h?'has':'')} ${sel?'sel':''}" ${h?`data-rg="${rg}"`:''} d="${f.d}">${tw?`<title>臺灣：${twRows.length} 位（另計，不畫泡泡）</title>`:''}</path>`}).join('')}
-      ${SCOPE==='all' ? pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);return ringSVG(p.rg,cx,cy,by.get(p.rg),max,18,p.name)}).join('') : pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);const r=4+Math.sqrt(p.n/max)*18;return `<circle class="bub ${SEL===p.rg||(p.rg==='tw:*'&&SEL&&SEL.startsWith('tw:'))?'sel':''}" data-rg="${p.rg}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"><title>${p.name}：${p.n} 位</title></circle>`}).join('')}
+      ${SCOPE==='all' ? pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);return ringSVG(p.rg,cx,cy,by.get(p.rg),max,8,p.name)}).join('') : pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);const r=2.5+Math.sqrt(p.n/max)*8;return `<circle class="bub ${SEL===p.rg||(p.rg==='tw:*'&&SEL&&SEL.startsWith('tw:'))?'sel':''}" data-rg="${p.rg}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"><title>${p.name}：${p.n} 位</title></circle>`}).join('')}
       ${(()=>{const [cx,cy]=P(121,23.7); const sel=SEL&&SEL.startsWith('tw:'); return `<circle class="homepin ${sel?'sel':''}" data-rg="tw:*" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="4.5"><title>臺灣：${twRows.length} 位（另計，不畫泡泡）</title></circle><text class="homelbl" x="${(cx+8).toFixed(1)}" y="${(cy+4).toFixed(1)}">臺灣</text>`})()}
       ${mine&&mine.startsWith('xx:')&&COUNTRY[mine.slice(3)]&&COUNTRY[mine.slice(3)][2]!=null?(()=>{const c=COUNTRY[mine.slice(3)];const [cx,cy]=P(c[2],c[3]);return `<circle class="me ping" cx="${cx}" cy="${cy}" r="10"/>`})():''}
     </svg>`;
