@@ -204,13 +204,8 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .mapsvg .land{fill:var(--map-0);stroke:var(--card);stroke-width:.4}
 .mapsvg .land.has{fill:var(--map-2);cursor:pointer}
 .mapsvg .land.has:hover,.mapsvg .land.sel{fill:var(--map-3)}
-.mapsvg .bub{fill:var(--yellow);stroke:var(--green-ink);stroke-width:1;cursor:pointer;fill-opacity:.85}
+.mapsvg .bub{fill:var(--yellow);stroke:var(--green-ink);stroke-width:1.2;cursor:pointer;fill-opacity:.9}
 .mapsvg .bub.sel{stroke-width:3}
-.mapsvg .land.home{fill:var(--seal);cursor:pointer}
-.mapsvg .land.home.sel{stroke:var(--ink);stroke-width:1}
-.mapsvg .homepin{fill:var(--seal);stroke:var(--card);stroke-width:1.5;cursor:pointer}
-.mapsvg .homepin.sel{stroke:var(--ink);stroke-width:2.5}
-.mapsvg .homelbl{font-size:13px;font-weight:700;fill:var(--seal);paint-order:stroke;stroke:var(--card);stroke-width:3px;pointer-events:none}
 .mapsvg .ring{cursor:pointer}
 .mapsvg .ring circle{stroke:var(--card);stroke-width:1.2}
 .mapsvg .ring.sel circle:first-child,.mapsvg .ring:hover circle:first-child{stroke:var(--ink);stroke-width:2}
@@ -228,6 +223,13 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .legend{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap}
 .legend i{width:22px;height:12px;border-radius:3px;display:inline-block}
 .info{gap:14px}
+.deptall{display:flex;flex-direction:column;gap:10px}
+.deptall .grp{font-size:13px;color:var(--ink-soft);margin:0 0 -4px}
+.dchips{display:flex;flex-wrap:wrap;gap:6px}
+.dchip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:3px 11px;font-size:14px;line-height:1.5;display:inline-flex;gap:5px;align-items:baseline}
+.dchip span{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-size:13px}
+.dchip.l3{background:var(--green);border-color:var(--green);color:var(--card)} .dchip.l3 span{color:var(--green-wash)}
+.dchip.l2{background:var(--green-wash)}
 .info .big{font-family:var(--font-display);font-size:40px;color:var(--green-ink);line-height:1;font-variant-numeric:tabular-nums}
 .bars{display:flex;flex-direction:column;gap:8px}
 .bar{display:grid;grid-template-columns:7.5em minmax(0,1fr) 2.6em;gap:8px;align-items:center;font-size:15px}
@@ -1178,14 +1180,28 @@ function count(arr,key){ const m=new Map(); arr.forEach(r=>{const v=r[key]; if(v
 function bars(entries,n,fmt=x=>x){ const top=entries.slice(0,n); const max=top.length?Math.max(...top.map(e=>e[1])):1;
   return `<div class="bars">${top.map(([k,v])=>`<div class="bar"><span class="k" title="${esc(fmt(k))}">${esc(fmt(k))}</span><span class="t"><i style="width:${Math.max(6,v/max*100)}%"></i></span><span class="n">${v}</span></div>`).join('') || '<p class="hint">還沒有資料</p>'}</div>`; }
 function decade(y){ const d=Math.floor(y/10)*10; return d; }
-function infoHTML(title, rows){
+/* 「看全部校友」時：各科別人數（日間部、夜間部同名科別分開算；初級部沒有科別，自成一格） */
+function deptAllHTML(rows){
+  const m=new Map();
+  rows.forEach(r=>{ const k = r.dv==='junior' ? 'junior|初級部' : (r.dp && r.dp!=='記不清楚了' ? r.dv+'|'+r.dp : ''); if(k) m.set(k,(m.get(k)||0)+1); });
+  const all=[...m.entries()].sort((a,b)=>b[1]-a[1]); if(!all.length) return '';
+  const rank=new Map(all.map(([k],i)=>[k,i]));
+  const chips=list=>`<div class="dchips">${list.map(([k,n])=>{ const i=rank.get(k); return `<span class="dchip ${i<3?'l3':i<6?'l2':''}">${esc(k.split('|')[1])}<span>${n}</span></span>`; }).join('')}</div>`;
+  const g=dv=>all.filter(([k])=>k.startsWith(dv+'|'));
+  const day=g('day'), night=g('night'), jr=g('junior');
+  return `<div class="deptall"><p class="sub" style="margin:0">各科別回來的人數</p>
+    ${day.length?`<p class="grp">日間部</p>${chips(day)}`:''}
+    ${night.length?`<p class="grp">夜間部／進修部</p>${chips(night)}`:''}
+    ${jr.length?chips(jr):''}</div>`;
+}
+function infoHTML(title, rows, isAll){
   const decs=count(rows.map(r=>({d:decade(r.y)})),'d').sort((a,b)=>a[0]-b[0]);
   const deps=count(rows.filter(r=>r.dp && r.dp!=='記不清楚了'),'dp');
   return `<p class="sub">${esc(title)}</p>
     <p><span class="big">${rows.length}</span>　位校友</p>
     ${rows.length? `<div><p class="sub" style="margin-bottom:8px">畢業年代（民國）</p>${bars(decs,8,d=>`${d}年代`)}</div>
-    <div><p class="sub" style="margin-bottom:8px">最多的科別</p>${bars(deps,5)}</div>
-    <div><p class="sub" style="margin-bottom:8px">現在在做什麼</p>${bars(count(rows,'jb'),5)}</div>
+    ${isAll ? deptAllHTML(rows) : `<div><p class="sub" style="margin-bottom:8px">最多的科別</p>${bars(deps,3)}</div>`}
+    <div><p class="sub" style="margin-bottom:8px">現在在做什麼</p>${bars(count(rows,'jb'),3)}</div>
     ${SCOPE==='all'?`<div><p class="sub" style="margin-bottom:8px">各學年度人數</p>${bars(count(rows,'s').sort((a,b)=>b[0]-a[0]),10,s=>`${s}學年度`)}</div>`:''}` : '<p class="hint">這裡還沒有亮燈，邀請住在這裡的老同學回來看看吧！</p>'}`;
 }
 let MAPTAB='tw', SEL=null, SCOPE='now';
@@ -1253,7 +1269,7 @@ function shareText(){
 function drawTiles(rows){
   const me=S.p;
   const regions=new Set(rows.map(r=>r.rg));
-  const twN=[...regions].filter(r=>r&&r.startsWith('tw:')).length, xxN=[...regions].filter(r=>r&&r.startsWith('xx:')&&r!=='xx:OTH').length;   // 「其他國家」不算一國，人數另外標在地圖圖例
+  const twN=[...regions].filter(r=>r&&r.startsWith('tw:')).length, xxN=[...regions].filter(r=>r&&r.startsWith('xx:')).length;
   const second = me.region
     ? `<b>${rows.filter(r=>r.y===me.year).length}</b><span>位民國${me.year}年畢業</span>`
     : (SCOPE==='now' ? `<b>${((STATS&&STATS.rows)||[]).length.toLocaleString()}</b><span>位歷年累計</span>` : `<b>${new Set(rows.map(r=>r.s)).size}</b><span>個學年度</span>`);
@@ -1303,20 +1319,18 @@ function drawMap(){
     $('#legend').innerHTML= all ? ringLegend() : `少 ${[1,2,3,4,5].map(i=>`<i style="background:var(--map-${i})"></i>`).join('')} 多`;
   } else {
     const twRows=rows.filter(r=>r.rg&&r.rg.startsWith('tw:'));
-    // 大多數校友在臺灣：臺灣不畫泡泡，只用另一個顏色標出位置；泡泡大小只比較海外各地
-    const pts=[].concat(CONFIG.COUNTRIES.filter(c=>c[2]!=null).map(c=>({rg:'xx:'+c[0],name:c[1],lon:c[2],lat:c[3],n:(by.get('xx:'+c[0])||[]).length}))).filter(p=>p.n>0);
+    const pts=[{rg:'tw:*',name:'臺灣',lon:121,lat:23.7,n:twRows.length}].concat(CONFIG.COUNTRIES.filter(c=>c[2]!=null).map(c=>({rg:'xx:'+c[0],name:c[1],lon:c[2],lat:c[3],n:(by.get('xx:'+c[0])||[]).length}))).filter(p=>p.n>0);
     const max=Math.max(1,...pts.map(p=>p.n));
     const has=new Set(pts.map(p=>p.rg.split(':')[1])); has.add('TWN');
     const P=(lon,lat)=>[(lon+180)*2.2,(84-lat)*2.4];
     const [x,y,w,h]=GEO.world.vb;
     svg=`<svg class="mapsvg" viewBox="${x} ${y} ${w} ${h}" role="img" aria-label="全世界校友分布地圖">
-      ${GEO.world.f.map(f=>{const rg=f.i==='TWN'?'tw:*':'xx:'+f.i; const tw=f.i==='TWN'; const h=has.has(f.i)&&(tw||by.has(rg)); const sel=SEL===rg||(tw&&SEL&&SEL.startsWith('tw:'));return `<path class="land ${tw?'home':(h?'has':'')} ${sel?'sel':''}" ${h?`data-rg="${rg}"`:''} d="${f.d}">${tw?`<title>臺灣：${twRows.length} 位（另計，不畫泡泡）</title>`:''}</path>`}).join('')}
-      ${SCOPE==='all' ? pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);return ringSVG(p.rg,cx,cy,by.get(p.rg),max,8,p.name)}).join('') : pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);const r=2.5+Math.sqrt(p.n/max)*8;return `<circle class="bub ${SEL===p.rg||(p.rg==='tw:*'&&SEL&&SEL.startsWith('tw:'))?'sel':''}" data-rg="${p.rg}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"><title>${p.name}：${p.n} 位</title></circle>`}).join('')}
-      ${(()=>{const [cx,cy]=P(121,23.7); const sel=SEL&&SEL.startsWith('tw:'); return `<circle class="homepin ${sel?'sel':''}" data-rg="tw:*" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="4.5"><title>臺灣：${twRows.length} 位（另計，不畫泡泡）</title></circle><text class="homelbl" x="${(cx+8).toFixed(1)}" y="${(cy+4).toFixed(1)}">臺灣</text>`})()}
+      ${GEO.world.f.map(f=>{const rg=f.i==='TWN'?'tw:*':'xx:'+f.i; const h=has.has(f.i)&&(f.i==='TWN'||by.has(rg));return `<path class="land ${h?'has':''} ${SEL===rg?'sel':''}" ${h?`data-rg="${rg}"`:''} d="${f.d}"></path>`}).join('')}
+      ${SCOPE==='all' ? pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);return ringSVG(p.rg,cx,cy,p.rg==='tw:*'?twRows:by.get(p.rg),max,18,p.name)}).join('') : pts.sort((a,b)=>b.n-a.n).map(p=>{const [cx,cy]=P(p.lon,p.lat);const r=4+Math.sqrt(p.n/max)*18;return `<circle class="bub ${SEL===p.rg||(p.rg==='tw:*'&&SEL&&SEL.startsWith('tw:'))?'sel':''}" data-rg="${p.rg}" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"><title>${p.name}：${p.n} 位</title></circle>`}).join('')}
       ${mine&&mine.startsWith('xx:')&&COUNTRY[mine.slice(3)]&&COUNTRY[mine.slice(3)][2]!=null?(()=>{const c=COUNTRY[mine.slice(3)];const [cx,cy]=P(c[2],c[3]);return `<circle class="me ping" cx="${cx}" cy="${cy}" r="10"/>`})():''}
     </svg>`;
     const oth=(by.get('xx:OTH')||[]).length;
-    $('#legend').innerHTML=(SCOPE==='all'? ringLegend()+'　圈越大人越多（只比較海外）' : `<i style="background:var(--yellow);border-radius:50%;width:12px;border:1px solid var(--green-ink)"></i> 泡泡越大人越多（只比較海外）`)+`　<i style="background:var(--seal);border-radius:50%;width:12px"></i> 臺灣 ${twRows.length} 位另計`+(oth?`　其他國家 ${oth} 位`:'');
+    $('#legend').innerHTML=(SCOPE==='all'? ringLegend()+'　圈越大人越多' : `<i style="background:var(--yellow);border-radius:50%;width:12px;border:1px solid var(--green-ink)"></i> 泡泡越大人越多`)+(oth?`　其他國家 ${oth} 位`:'');
   }
   $('#map').innerHTML=svg;
   if(MAPTAB==='tw'){ const g=$('#map svg');
@@ -1336,7 +1350,7 @@ function renderInfo(){
   else if(SEL==='tw:*'){ title='臺灣'; rs=rows.filter(r=>r.rg&&r.rg.startsWith('tw:')); }
   else if(MAPTAB==='world' && SEL.startsWith('tw:')){ title='臺灣'; rs=rows.filter(r=>r.rg&&r.rg.startsWith('tw:')); }
   else { title=`${regionName(SEL)}（${scopeName()}）`; rs=rows.filter(r=>r.rg===SEL); }
-  $('#info').innerHTML=infoHTML(title, rs) + (SEL?'<button class="linkbtn" id="all" style="align-self:flex-start">看全部校友</button>':'');
+  $('#info').innerHTML=infoHTML(title, rs, !SEL) + (SEL?'<button class="linkbtn" id="all" style="align-self:flex-start">看全部校友</button>':'');
   const a=$('#all'); if(a) a.onclick=()=>{ SEL=null; drawMap(); };
 }
 
